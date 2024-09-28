@@ -17,10 +17,13 @@ public class Ministerio implements Serializable {
     private String nome;
 
     @OneToMany(cascade = CascadeType.ALL)
-    private List<Funcao> funcoes = new ArrayList<>();
+    private List<Funcao> funcoes;
 
     @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Membro> membros  = new ArrayList<>();
+    private List<Membro> membros;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Escala> escalas;
 
     public Long getId() {
         return id;
@@ -52,5 +55,13 @@ public class Ministerio implements Serializable {
 
     public void setMembros(List<Membro> membros) {
         this.membros = membros;
+    }
+
+    public List<Escala> getEscalas() {
+        return escalas;
+    }
+
+    public void setEscalas(List<Escala> escalas) {
+        this.escalas = escalas;
     }
 }

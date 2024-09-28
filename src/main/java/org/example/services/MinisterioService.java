@@ -22,6 +22,7 @@ public class MinisterioService {
          if (ministerio != null) {
              Hibernate.initialize(ministerio.getFuncoes());
              Hibernate.initialize(ministerio.getMembros());
+             Hibernate.initialize(ministerio.getEscalas());
          }
 
         return ministerio;
@@ -79,12 +80,19 @@ public class MinisterioService {
         }
     }
 
-    public List<Ministerio> listAllMimnisterios() {
+    public List<Ministerio> listAllMinisterios() {
         List<Ministerio> ministerios = em.createQuery("Select m FROM Ministerio m").getResultList();
         ministerios.forEach(ministerio -> {
             Hibernate.initialize(ministerio.getFuncoes());
             Hibernate.initialize(ministerio.getMembros());
+            Hibernate.initialize(ministerio.getEscalas());
         });
         return ministerios;
+    }
+
+    public void gerarEscala(Ministerio ministerio) {
+        ministerio.getEscalas().forEach(escala -> {
+            em.persist(escala);
+        });
     }
 }

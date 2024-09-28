@@ -1,10 +1,13 @@
 package org.example.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import org.example.utils.MapDeserializer;
+
+import javax.json.bind.annotation.JsonbTypeDeserializer;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Escala {
@@ -15,8 +18,12 @@ public class Escala {
     private LocalDate data;
     private Turno turno;
 
-    @ManyToOne
-    private Ministerio ministerio;
+    @ElementCollection
+    @MapKeyColumn(name = "posicoes_key")  // Column for the key
+    @Column(name = "posicoes_value")      // Column for the value
+    @CollectionTable(name = "escala_posicoes", joinColumns = @JoinColumn(name = "escala_id"))
+    @JsonbTypeDeserializer(MapDeserializer.class)
+    private Map<String, String> posicoes;
 
     public Long getId() {
         return id;
@@ -42,13 +49,11 @@ public class Escala {
         this.turno = turno;
     }
 
-    public Ministerio getMinisterio() {
-        return ministerio;
+    public Map<String, String> getPosicoes() {
+        return posicoes;
     }
 
-    public void setMinisterio(Ministerio ministerio) {
-        this.ministerio = ministerio;
+    public void setPosicoes(Map<String, String> posicoes) {
+        this.posicoes = posicoes;
     }
-
-
 }

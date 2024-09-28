@@ -4,6 +4,8 @@ import org.example.domain.Ministerio;
 import org.example.services.MinisterioService;
 
 import javax.inject.Inject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -35,7 +37,7 @@ public class MinisteriosResource {
 
     @GET
     public List<Ministerio> getAllMinisterios(){
-        return ministerioService.listAllMimnisterios();
+        return ministerioService.listAllMinisterios();
     }
 
     @PUT
@@ -45,6 +47,18 @@ public class MinisteriosResource {
             return Response.status(Response.Status.OK).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
+    @POST
+    @Path("/{gerarEscala}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response gerarEscala(Ministerio ministerio) {
+        try {
+            ministerioService.gerarEscala(ministerio);
+            return Response.status(Response.Status.CREATED).entity(ministerio).build();
+        } catch (Exception e) {
+            return Response.status(400, e.getMessage()).build();
         }
     }
 
